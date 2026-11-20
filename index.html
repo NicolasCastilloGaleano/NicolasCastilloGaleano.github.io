@@ -3,359 +3,464 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dev Portfolio</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<title>Nicolas Castillo Galeano · Backend e IA aplicada</title>
+<meta name="description" content="Portafolio de Nicolas Castillo Galeano: desarrollo backend en Python e IA aplicada (RAG, LLM locales). Proyectos, experiencia y contacto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #0a0a0f;
-    --bg2: #111118;
-    --bg3: #1a1a24;
-    --accent: #7c6af7;
-    --accent2: #a78bfa;
-    --accent3: #38bdf8;
-    --text: #e8e8f0;
-    --muted: #8888a0;
-    --border: rgba(124,106,247,0.18);
-    --green: #34d399;
-    --amber: #fbbf24;
+    --bg: #fbfbfa;
+    --surface: #ffffff;
+    --surface-2: #f3f4f2;
+    --text: #1b1d1f;
+    --muted: #5d6369;
+    --faint: #8a9096;
+    --border: #e3e5e2;
+    --accent: #0f6e5c;
+    --accent-soft: #e6f2ef;
+    --accent-text: #0b5a4b;
+    --shadow: 0 1px 2px rgba(20,24,28,.04), 0 4px 16px rgba(20,24,28,.04);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111315;
+      --surface: #171a1c;
+      --surface-2: #1d2124;
+      --text: #e8eaeb;
+      --muted: #a2a8ad;
+      --faint: #7b8288;
+      --border: #2a2f33;
+      --accent: #4cc2a7;
+      --accent-soft: #15302a;
+      --accent-text: #7fd8c3;
+      --shadow: none;
+      color-scheme: dark;
+    }
   }
 
   html { scroll-behavior: smooth; }
-
   body {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
   }
+  a { color: var(--accent-text); text-underline-offset: 3px; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
 
-  /* ── NAV ── */
+  /* NAV */
   nav {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(10,10,15,0.85);
-    backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1rem 2.5rem;
   }
-  .nav-logo {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1rem; color: var(--accent2);
-    letter-spacing: 0.05em;
-  }
-  .nav-logo span { color: var(--accent3); }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a {
-    font-size: 0.85rem; color: var(--muted); text-decoration: none;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    transition: color 0.2s;
-  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
+  .logo { font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: -.01em; white-space: nowrap; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 22px; list-style: none; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: .9rem; white-space: nowrap; }
   .nav-links a:hover { color: var(--text); }
 
-  /* ── HERO ── */
-  .hero {
-    min-height: 92vh;
-    display: flex; flex-direction: column; justify-content: center;
-    padding: 6rem 2.5rem 4rem;
-    position: relative; overflow: hidden;
+  /* HERO */
+  .hero { padding: 88px 0 64px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: .82rem; color: var(--accent-text);
+    background: var(--accent-soft); padding: 5px 12px; border-radius: 999px;
+    margin-bottom: 24px;
   }
-  .hero::before {
-    content: '';
-    position: absolute; top: -200px; right: -200px;
-    width: 600px; height: 600px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(124,106,247,0.12) 0%, transparent 70%);
-    pointer-events: none;
+  .eyebrow::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  h1 { font-size: clamp(2.2rem, 5.5vw, 3.6rem); line-height: 1.08; letter-spacing: -.03em; font-weight: 700; margin-bottom: 14px; }
+  .role { font-size: clamp(1.1rem, 2.4vw, 1.35rem); color: var(--muted); font-weight: 500; margin-bottom: 22px; }
+  .lead { max-width: 660px; font-size: 1.05rem; color: var(--muted); margin-bottom: 30px; }
+  .lead strong { color: var(--text); font-weight: 600; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 8px; font-size: .92rem; font-weight: 500;
+    text-decoration: none; border: 1px solid var(--border); color: var(--text); background: var(--surface);
+    transition: border-color .15s, transform .15s;
   }
-  .hero-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem; color: var(--accent);
-    letter-spacing: 0.15em; text-transform: uppercase;
-    margin-bottom: 1.5rem;
-    display: flex; align-items: center; gap: 0.5rem;
-  }
-  .hero-tag::before {
-    content: '';
-    display: inline-block; width: 24px; height: 1px;
-    background: var(--accent);
-  }
-  .hero h1 {
-    font-size: clamp(2.8rem, 6vw, 5rem);
-    font-weight: 800; line-height: 1.05;
-    letter-spacing: -0.02em; margin-bottom: 0.25rem;
-  }
-  .hero h1 .name-accent { color: var(--accent2); }
-  .hero-role {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1.1rem; color: var(--accent3);
-    margin-bottom: 1.75rem;
-  }
-  .hero-role::before { content: '> '; color: var(--muted); }
-  .hero-desc {
-    max-width: 520px; font-size: 1.05rem;
-    color: var(--muted); line-height: 1.75;
-    margin-bottom: 2.5rem;
-  }
-  .hero-cta {
-    display: flex; gap: 1rem; flex-wrap: wrap;
-  }
-  .btn-primary {
-    padding: 0.75rem 1.75rem;
-    background: var(--accent);
-    color: #fff; border: none; border-radius: 6px;
-    font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 600;
-    cursor: pointer; text-decoration: none;
-    transition: background 0.2s, transform 0.1s;
-    display: inline-block;
-  }
-  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
-  .btn-ghost {
-    padding: 0.75rem 1.75rem;
-    background: transparent; color: var(--text);
-    border: 1px solid var(--border); border-radius: 6px;
-    font-family: 'Syne', sans-serif; font-size: 0.9rem;
-    cursor: pointer; text-decoration: none;
-    transition: border-color 0.2s, color 0.2s;
-    display: inline-block;
-  }
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent2); }
+  .btn:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  @media (prefers-color-scheme: dark) { .btn.primary { color: #08201b; } }
+  .btn svg { width: 16px; height: 16px; flex: none; }
 
-  /* ── SECTION WRAPPER ── */
-  section { padding: 5rem 2.5rem; }
-  .section-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem; color: var(--accent);
-    letter-spacing: 0.2em; text-transform: uppercase;
-    margin-bottom: 0.75rem;
-  }
-  .section-title {
-    font-size: 2rem; font-weight: 800;
-    letter-spacing: -0.02em; margin-bottom: 3rem;
-  }
-  .section-title span { color: var(--accent2); }
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 56px; }
+  .fact { background: var(--surface); padding: 18px 20px; }
+  .fact b { display: block; font-size: 1.5rem; letter-spacing: -.02em; }
+  .fact span { font-size: .84rem; color: var(--muted); }
 
-  /* ── ABOUT ── */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem; align-items: start;
-    max-width: 900px;
-  }
-  .about-text { font-size: 1rem; color: var(--muted); line-height: 1.8; }
-  .about-text p { margin-bottom: 1rem; }
-  .about-text strong { color: var(--text); font-weight: 600; }
-  .about-card {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 12px; padding: 1.5rem;
-  }
-  .about-card-item {
-    display: flex; justify-content: space-between;
-    padding: 0.6rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 0.9rem;
-  }
-  .about-card-item:last-child { border-bottom: none; }
-  .about-card-item .key { color: var(--muted); }
-  .about-card-item .val { color: var(--text); font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
-  .status-dot {
-    display: inline-block; width: 8px; height: 8px;
-    border-radius: 50%; background: var(--green);
-    margin-right: 6px; animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
+  /* SECTIONS */
+  section { padding: 64px 0; border-top: 1px solid var(--border); }
+  .label { font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; color: var(--accent-text); font-weight: 600; margin-bottom: 8px; }
+  h2 { font-size: 1.75rem; letter-spacing: -.02em; margin-bottom: 28px; }
+  h3 { font-size: 1.08rem; letter-spacing: -.01em; }
 
-  /* ── SKILLS ── */
-  #skills { background: var(--bg2); }
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.25rem; max-width: 900px;
-  }
-  .skill-card {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 10px; padding: 1.25rem 1.5rem;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .skill-card:hover { border-color: var(--accent); transform: translateY(-3px); }
-  .skill-card-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
-  .skill-card-title {
-    font-size: 0.9rem; font-weight: 600;
-    margin-bottom: 0.5rem; color: var(--text);
-  }
-  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem; padding: 0.2rem 0.55rem;
-    background: rgba(124,106,247,0.12);
-    color: var(--accent2);
-    border-radius: 4px; border: 1px solid rgba(124,106,247,0.2);
-  }
+  /* EXPERIENCE */
+  .timeline { display: grid; gap: 18px; }
+  .job { display: grid; grid-template-columns: 170px 1fr; gap: 24px; padding: 22px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); }
+  .job .when { font-size: .85rem; color: var(--faint); padding-top: 2px; }
+  .job .org { color: var(--muted); font-size: .92rem; margin: 2px 0 10px; }
+  .job ul { padding-left: 18px; color: var(--muted); font-size: .95rem; }
+  .job li { margin-bottom: 4px; }
+  .job li::marker { color: var(--accent); }
 
-  /* ── PROJECTS ── */
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem; max-width: 1000px;
-  }
-  .project-card {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 12px; padding: 1.75rem;
-    position: relative; overflow: hidden;
-    transition: border-color 0.25s, transform 0.25s;
-  }
-  .project-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent3));
-    opacity: 0; transition: opacity 0.25s;
-  }
-  .project-card:hover { border-color: rgba(124,106,247,0.4); transform: translateY(-4px); }
-  .project-card:hover::before { opacity: 1; }
-  .project-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem; color: var(--accent); margin-bottom: 1rem;
-    letter-spacing: 0.1em;
-  }
-  .project-title {
-    font-size: 1.1rem; font-weight: 700;
-    margin-bottom: 0.6rem; color: var(--text);
-  }
-  .project-desc {
-    font-size: 0.88rem; color: var(--muted);
-    line-height: 1.7; margin-bottom: 1.25rem;
-  }
-  .project-footer {
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .project-stack { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-  .project-link {
-    font-size: 0.8rem; color: var(--accent2);
-    text-decoration: none; font-family: 'JetBrains Mono', monospace;
-    transition: color 0.2s;
-  }
-  .project-link:hover { color: var(--text); }
+  /* FEATURED */
+  .featured { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 30px; box-shadow: var(--shadow); }
+  .featured-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
+  .featured h3 { font-size: 1.4rem; }
+  .featured > p { color: var(--muted); max-width: 760px; }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 24px 0; }
+  .metric { background: var(--surface-2); border-radius: 10px; padding: 14px 16px; }
+  .metric b { display: block; font-size: 1.3rem; letter-spacing: -.02em; }
+  .metric span { font-size: .82rem; color: var(--muted); }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 8px; }
+  .cols h4 { font-size: .95rem; margin-bottom: 8px; }
+  .cols ul { padding-left: 18px; color: var(--muted); font-size: .93rem; }
+  .cols li { margin-bottom: 6px; }
+  .cols li::marker { color: var(--accent); }
+  .note { font-size: .82rem; color: var(--faint); margin-top: 18px; }
 
-  /* ── CONTACT ── */
-  #contacto { background: var(--bg2); }
-  .contact-wrapper { max-width: 520px; }
-  .contact-intro {
-    font-size: 1rem; color: var(--muted);
-    line-height: 1.75; margin-bottom: 2rem;
-  }
-  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
-  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-  .form-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem; color: var(--accent);
-    letter-spacing: 0.12em; text-transform: uppercase;
-  }
-  .form-input, .form-textarea {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 8px; padding: 0.75rem 1rem;
-    color: var(--text); font-family: 'Syne', sans-serif; font-size: 0.9rem;
-    transition: border-color 0.2s;
-    outline: none;
-  }
-  .form-input:focus, .form-textarea:focus {
-    border-color: var(--accent);
-  }
-  .form-textarea { resize: vertical; min-height: 120px; }
-  ::placeholder { color: var(--muted); opacity: 0.6; }
+  /* PROJECTS */
+  .group { margin-top: 40px; }
+  .group:first-of-type { margin-top: 0; }
+  .group-title { font-size: .95rem; color: var(--muted); font-weight: 600; margin-bottom: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .card { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: border-color .15s, transform .15s; }
+  .card:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); transform: translateY(-2px); }
+  .card .ctx { font-size: .78rem; color: var(--faint); margin-bottom: 6px; }
+  .card h3 { margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: .92rem; margin-bottom: 14px; flex: 1; }
+  .card .me { font-size: .86rem; color: var(--text); margin: -6px 0 14px; }
+  .card .me b { color: var(--accent-text); font-weight: 600; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-family: 'JetBrains Mono', monospace; font-size: .72rem; padding: 3px 8px; border-radius: 6px; background: var(--surface-2); color: var(--muted); border: 1px solid var(--border); }
+  .card-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-top: 14px; }
+  .repo { font-size: .85rem; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .repo:hover { text-decoration: underline; }
 
-  .social-links {
-    display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap;
-  }
-  .social-link {
-    display: flex; align-items: center; gap: 0.5rem;
-    padding: 0.6rem 1.1rem;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 8px; color: var(--muted);
-    text-decoration: none; font-size: 0.85rem;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .social-link:hover { border-color: var(--accent); color: var(--accent2); }
+  /* SKILLS */
+  .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .skill { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .skill h3 { font-size: .98rem; margin-bottom: 12px; }
+  .skill .tags { gap: 7px; }
+  .tag.strong { background: var(--accent-soft); color: var(--accent-text); border-color: transparent; }
+  .tag.learning { border-style: dashed; }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: .82rem; color: var(--muted); margin-top: 16px; align-items: center; }
+  .legend .tag { font-size: .7rem; }
 
-  /* ── FOOTER ── */
-  footer {
-    text-align: center; padding: 2rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem; color: var(--muted);
-    border-top: 1px solid var(--border);
-  }
+  /* EDUCATION */
+  .edu { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .edu-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .edu-card p { color: var(--muted); font-size: .93rem; }
+  .edu-card .when { font-size: .82rem; color: var(--faint); margin-top: 8px; }
 
-  @media (max-width: 640px) {
-    nav { padding: 1rem 1.25rem; }
-    .nav-links { gap: 1rem; }
-    .hero, section { padding-left: 1.25rem; padding-right: 1.25rem; }
-    .about-grid { grid-template-columns: 1fr; }
+  /* CONTACT */
+  .contact p { color: var(--muted); max-width: 600px; margin-bottom: 24px; }
+
+  footer { border-top: 1px solid var(--border); padding: 28px 0 40px; font-size: .84rem; color: var(--faint); }
+
+  @media (max-width: 760px) {
+    .hero { padding: 56px 0 44px; }
+    .facts { grid-template-columns: repeat(2, 1fr); margin-top: 40px; }
+    .job { grid-template-columns: 1fr; gap: 6px; padding: 20px; }
+    .cols { grid-template-columns: 1fr; gap: 18px; }
+    .featured { padding: 22px; }
+    section { padding: 52px 0; }
+    .wrap { padding: 0 16px; }
+    .nav-links { gap: 16px; }
+    .logo { display: none; }
   }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo">tu<span>.</span>dev</div>
-  <ul class="nav-links">
-    <li><a href="#sobre-mi">sobre mí</a></li>
-    <li><a href="#habilidades">skills</a></li>
-    <li><a href="#proyectos">proyectos</a></li>
-    <li><a href="#contacto">contacto</a></li>
-  </ul>
+  <div class="wrap">
+    <a href="#inicio" class="logo">Nicolas<span>.</span>CG</a>
+    <ul class="nav-links">
+      <li><a href="#experiencia">Experiencia</a></li>
+      <li><a href="#destacado">Destacado</a></li>
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="#habilidades">Habilidades</a></li>
+      <li><a href="#formacion">Formación</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="inicio">
-  <p class="hero-tag">Disponible para colaborar</p>
-  <h1>Hola, soy<br><span class="name-accent">Nicolas Castillo Galeano</span></h1>
-  <p class="hero-role">Desarrollador de Software</p>
-  <p class="hero-desc">
-    Apasionado por construir soluciones desde cero. Actualmente formándome en la universidad y buscando mi primer reto profesional.
-  </p>
-  <div class="hero-cta">
-    <a href="#proyectos" class="btn-primary">Ver proyectos</a>
-    <a href="#contacto" class="btn-ghost">Contactarme</a>
+<main id="inicio">
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Disponible para práctica empresarial · Manizales, Colombia</p>
+    <h1>Nicolas Castillo Galeano</h1>
+    <p class="role">Desarrollador backend en Python · IA aplicada</p>
+    <p class="lead">
+      Estudiante de último año de <strong>Ingeniería de Sistemas y Computación</strong> en la Universidad de Caldas.
+      Lidero el desarrollo de un <strong>asistente de teleorientación en salud con IA</strong> (RAG y LLM locales) para un proyecto de investigación
+      con la Dirección Territorial de Salud de Caldas. Me interesa construir backends confiables, bien probados y con una arquitectura clara,
+      y uso la IA como parte del flujo de desarrollo: reglas para agentes, prompts versionados y verificación automática.
+    </p>
+    <div class="actions">
+      <a class="btn primary" href="#destacado">Ver proyecto destacado</a>
+      <a class="btn" href="https://github.com/NicolasCastilloGaleano" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a class="btn" href="mailto:nicolas99cg@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        nicolas99cg@gmail.com
+      </a>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><b>4.2 / 5.0</b><span>Promedio acumulado</span></div>
+      <div class="fact"><b>9.º</b><span>Semestre · grado 2027</span></div>
+      <div class="fact"><b>500+</b><span>Pruebas automatizadas en el proyecto principal</span></div>
+      <div class="fact"><b>20+</b><span>Repositorios públicos</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- EXPERIENCIA -->
+<section id="experiencia">
+  <div class="wrap">
+    <p class="label">Experiencia</p>
+    <h2>Dónde he trabajado</h2>
+    <div class="timeline">
+      <article class="job">
+        <div class="when">2026 – dic. 2026</div>
+        <div>
+          <h3>Líder de desarrollo del prototipo · Contrato de investigación</h3>
+          <p class="org">Universidad de Caldas · Proyecto de investigación en salud cardiovascular y materno‑infantil con la Dirección Territorial de Salud de Caldas</p>
+          <ul>
+            <li>Coordino el desarrollo del asistente de teleorientación con IA (ver <a href="#destacado">proyecto destacado</a>): arquitectura, priorización del backlog y revisión del trabajo del equipo.</li>
+            <li>Apoyo las actividades de investigación en salud cardiovascular del proyecto.</li>
+            <li>Estructuro y redacto los artículos científicos derivados del proyecto.</li>
+          </ul>
+        </div>
+      </article>
+      <article class="job">
+        <div class="when">2026 · segundo semestre</div>
+        <div>
+          <h3>Monitor de desarrollo · Plataforma SABio</h3>
+          <p class="org">Biblioteca, Universidad de Caldas</p>
+          <ul>
+            <li>Refactoricé un caso de uso en Java, construido con tecnologías heredadas, que presentaba fallos en producción.</li>
+          </ul>
+        </div>
+      </article>
+      <article class="job">
+        <div class="when">2023 – 2026</div>
+        <div>
+          <h3>Integrante · Semillero de investigación ITENUA</h3>
+          <p class="org">Universidad de Caldas</p>
+          <ul>
+            <li>Formación en las bases matemáticas de las redes neuronales y su evolución hasta los modelos de IA actuales.</li>
+            <li>Búsqueda de áreas de aplicación para los conocimientos adquiridos.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
   </div>
 </section>
 
-<!-- SOBRE MÍ -->
-<section id="sobre-mi">
-  <p class="section-label">// 01. sobre mí</p>
-  <h2 class="section-title">Quién <span>soy</span></h2>
-  <div class="about-grid">
-    <div class="about-text">
-      <p>Soy estudiante de <strong>Ingeniería de Software</strong> con un enfoque práctico en resolver problemas reales a través del código.</p>
-      <p>Mi formación universitaria me ha dado bases sólidas en algoritmos, estructuras de datos y desarrollo de software. Cada proyecto que construyo es una oportunidad de aprender algo nuevo.</p>
-      <p>Busco <strong>oportunidades de prácticas o proyectos colaborativos</strong> donde pueda aportar y seguir creciendo.</p>
+<!-- DESTACADO -->
+<section id="destacado">
+  <div class="wrap">
+    <p class="label">Proyecto destacado</p>
+    <h2>Asistente de teleorientación en salud con IA</h2>
+    <article class="featured">
+      <div class="featured-head">
+        <div class="tags">
+          <span class="tag strong">Python 3.12</span><span class="tag strong">FastAPI</span><span class="tag strong">Ollama</span>
+          <span class="tag strong">RAG híbrido</span><span class="tag">SQLite</span><span class="tag">WhatsApp Cloud API</span>
+          <span class="tag">pytest</span><span class="tag">mypy --strict</span><span class="tag">GitHub Actions</span>
+        </div>
+        <a class="repo" href="https://github.com/NicolasCastilloGaleano/chatbot-cardio-materno" target="_blank" rel="noopener">Ver repositorio →</a>
+      </div>
+      <p>
+        Asistente conversacional que orienta (no diagnostica) a comunidades de Caldas en salud cardiovascular y materno‑infantil.
+        Detecta signos de alarma con reglas deterministas, responde solo con evidencia de una base de conocimiento curada y funciona por consola,
+        web y WhatsApp. Fui el líder del equipo de desarrollo y el autor de la mayoría de los commits.
+      </p>
+
+      <div class="metrics">
+        <div class="metric"><b>~10.800</b><span>líneas de código fuente</span></div>
+        <div class="metric"><b>500+</b><span>pruebas automatizadas</span></div>
+        <div class="metric"><b>20</b><span>decisiones de arquitectura (ADR)</span></div>
+        <div class="metric"><b>4.049</b><span>registros en la base de conocimiento</span></div>
+        <div class="metric"><b>116 / 180</b><span>commits de mi autoría</span></div>
+      </div>
+
+      <div class="cols">
+        <div>
+          <h4>Arquitectura y backend</h4>
+          <ul>
+            <li><b>Arquitectura hexagonal</b> (puertos y adaptadores): los canales (consola, web, WhatsApp) son adaptadores intercambiables.</li>
+            <li><b>Seguridad por diseño:</b> la detección de alarmas es determinista y probada; el LLM solo interpreta el lenguaje y redacta, nunca decide.</li>
+            <li><b>RAG híbrido</b> (BM25 + vectores) con índice propio en numpy, selector de evidencia y verificación de que cada frase de salud cite su fuente; sin evidencia, el sistema se abstiene.</li>
+            <li>Webhook de WhatsApp con verificación de firma, usuarios identificados por HMAC (sin guardar el teléfono) y auditoría de chats.</li>
+            <li>Pruebas en GPU del supercomputador <b>MareNostrum 5</b> (BSC) y comparación de modelos por latencia.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Flujo de trabajo con IA</h4>
+          <ul>
+            <li><b>Desarrollo guiado por especificación:</b> historias de usuario y especificación ejecutable como fuente de verdad, con trazabilidad al código.</li>
+            <li><b>Reglas para agentes de IA</b> (<span class="mono">AGENTS.md</span> / <span class="mono">CLAUDE.md</span>): arquitectura, estándares y definición de terminado que los agentes deben cumplir.</li>
+            <li><b>Hooks y comandos de Claude Code</b> que verifican la documentación y auditan los lineamientos antes de cerrar una tarea.</li>
+            <li><b>Prompts versionados</b> y trazas de cada llamada al modelo para depurar y medir.</li>
+            <li>CI en cada push: <span class="mono">ruff</span>, <span class="mono">mypy --strict</span> y <span class="mono">pytest</span>; ramas y Conventional Commits.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="note">Prototipo en validación: las reglas clínicas están pendientes de revisión por el equipo de salud.</p>
+    </article>
+  </div>
+</section>
+
+<!-- PROYECTOS -->
+<section id="proyectos">
+  <div class="wrap">
+    <p class="label">Proyectos</p>
+    <h2>Más trabajo en GitHub</h2>
+
+    <div class="group">
+      <p class="group-title">IA aplicada</p>
+      <div class="grid">
+        <article class="card">
+          <p class="ctx">Proyecto de investigación · 2026</p>
+          <h3>Agente RAG conversacional</h3>
+          <p>Segunda iteración del asistente: reglas deterministas antes del modelo, clasificación del mensaje en JSON validado con Pydantic, recuperación en ChromaDB filtrada por dominio y validación de las citas.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">Python</span><span class="tag">Ollama</span><span class="tag">ChromaDB</span><span class="tag">Pydantic</span></div>
+            <a class="repo" href="https://github.com/NicolasCastilloGaleano/Agente-RAG-Cardio-Materno-Infantil" target="_blank" rel="noopener">Repo →</a>
+          </div>
+        </article>
+        <article class="card">
+          <p class="ctx">Proyecto de investigación · 2026</p>
+          <h3>Piloto RAG médico local</h3>
+          <p>Primer piloto del asistente, 100 % local: importación desde Excel a MariaDB, embeddings con Ollama, almacenamiento en ChromaDB y respuesta con un modelo local.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">Python</span><span class="tag">MariaDB</span><span class="tag">ChromaDB</span><span class="tag">pandas</span></div>
+            <a class="repo" href="https://github.com/NicolasCastilloGaleano/Piloto_RAG_Medico" target="_blank" rel="noopener">Repo →</a>
+          </div>
+        </article>
+        <article class="card">
+          <p class="ctx">Sistemas Inteligentes I · 2026</p>
+          <h3>Recomendador de películas con RAG</h3>
+          <p>Limpieza del dataset TMDB, carga en Supabase, índice vectorial (pgvector) con embeddings de OpenAI o locales, y bots de Telegram con LangChain y con n8n.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">LangChain</span><span class="tag">n8n</span><span class="tag">Supabase</span><span class="tag">OpenAI</span></div>
+            <a class="repo" href="https://github.com/NicolasCastilloGaleano/Movies_N8N_LC" target="_blank" rel="noopener">Repo →</a>
+          </div>
+        </article>
+        <article class="card">
+          <p class="ctx">Ingeniería del Conocimiento · 2026</p>
+          <h3>Sistema experto de triaje con lógica difusa</h3>
+          <p>Motor de inferencia difusa con explicación de cada decisión para priorizar la atención en un centro de salud rural. Validado en tres rondas de casos, con matriz ética y ontología.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">JavaScript</span><span class="tag">Lógica difusa</span><span class="tag">node:test</span></div>
+            <a class="repo" href="https://github.com/NicolasCastilloGaleano/TriajeLogicaDifusa" target="_blank" rel="noopener">Repo →</a>
+          </div>
+        </article>
+        <article class="card">
+          <p class="ctx">Prototipo para una empresa, con un profesor · 2026</p>
+          <h3>Conteo de personas con visión por computador</h3>
+          <p>Detección con YOLOv8 sobre varias cámaras IP (RTSP). Servicio de captura desacoplado de la interfaz en Streamlit, con estadísticas diarias y exportación de datos.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">Python</span><span class="tag">YOLOv8</span><span class="tag">OpenCV</span><span class="tag">Streamlit</span></div>
+            <a class="repo" href="https://github.com/NicolasCastilloGaleano/prototipo_flujo_personas" target="_blank" rel="noopener">Repo →</a>
+          </div>
+        </article>
+      </div>
     </div>
-    <div class="about-card">
-      <div class="about-card-item">
-        <span class="key">Estado</span>
-        <span class="val"><span class="status-dot"></span>Disponible</span>
+
+    <div class="group">
+      <p class="group-title">Backend y APIs</p>
+      <div class="grid">
+        <article class="card">
+          <p class="ctx">Ingeniería de Software III · 2025 · equipo de 4</p>
+          <h3>Plataforma de bienestar y eventos</h3>
+          <p>API REST en Express 5 y TypeScript sobre Firebase, con frontend en React 19. Pruebas unitarias y de integración con Vitest.</p>
+          <p class="me"><b>Mi parte:</b> autenticación (registro e inicio de sesión), endpoints de estados de ánimo, módulo de eventos y lógica de permisos.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">TypeScript</span><span class="tag">Express</span><span class="tag">Firestore</span><span class="tag">Vitest</span></div>
+            <a class="repo" href="https://github.com/NicolasCastilloGaleano/ProyectoSwIII-2025-2" target="_blank" rel="noopener">Repo →</a>
+          </div>
+        </article>
+        <article class="card">
+          <p class="ctx">Proyecto académico · 2024 · equipo de 2</p>
+          <h3>Backend de gestión de eventos (microservicios)</h3>
+          <p>Microservicio de negocio en Flask y MongoDB, y microservicio de seguridad en Spring Boot con JWT, roles y permisos.</p>
+          <p class="me"><b>Mi parte:</b> módulos de eventos, inscripciones, certificados en PDF (ReportLab), notificaciones y retroalimentación.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">MongoDB</span><span class="tag">Spring Boot</span></div>
+            <a class="repo" href="https://github.com/NicolasCastilloGaleano/Events_Backend" target="_blank" rel="noopener">Repo →</a>
+          </div>
+        </article>
+        <article class="card">
+          <p class="ctx">Programación web · 2023</p>
+          <h3>Sistema de cine en microservicios</h3>
+          <p>Servicio de seguridad en Spring Boot (JWT, roles y permisos), API de cine en AdonisJS con migraciones, y frontend en Angular con guards e interceptores.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">Java</span><span class="tag">AdonisJS</span><span class="tag">Angular</span></div>
+            <a class="repo" href="https://github.com/NicolasCastilloGaleano/ms-security" target="_blank" rel="noopener">Repos →</a>
+          </div>
+        </article>
+        <article class="card">
+          <p class="ctx">Práctica de integración continua · 2024</p>
+          <h3>Pipeline de CI con GitHub Actions</h3>
+          <p>Pipeline que ejecuta las pruebas en cada push, con hooks de pre-commit (Husky) y pruebas con Jasmine sobre una app Express.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">GitHub Actions</span><span class="tag">Husky</span><span class="tag">Jasmine</span></div>
+            <a class="repo" href="https://github.com/NicolasCastilloGaleano/pruebas-en-github" target="_blank" rel="noopener">Repo →</a>
+          </div>
+        </article>
       </div>
-      <div class="about-card-item">
-        <span class="key">Ubicación</span>
-        <span class="val">Colombia 🇨🇴</span>
-      </div>
-      <div class="about-card-item">
-        <span class="key">Formación</span>
-        <span class="val">Ing. de Software</span>
-      </div>
-      <div class="about-card-item">
-        <span class="key">Idiomas</span>
-        <span class="val">ES / EN</span>
-      </div>
-      <div class="about-card-item">
-        <span class="key">Enfoque</span>
-        <span class="val">Backend / Full-stack</span>
+    </div>
+
+    <div class="group">
+      <p class="group-title">Algoritmos y sistemas</p>
+      <div class="grid">
+        <article class="card">
+          <p class="ctx">Análisis y Diseño de Algoritmos · 2025</p>
+          <h3>Estrategias de optimización para análisis de irreducibilidad</h3>
+          <p>Estrategias (QNodes y una optimización geométrica) para hallar la partición de un sistema que menos información pierde, comparadas contra fuerza bruta.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">Python</span><span class="tag">NumPy</span><span class="tag">Algoritmos</span></div>
+            <a class="repo" href="https://github.com/NicolasCastilloGaleano/Geometric_Algorithm" target="_blank" rel="noopener">Repo →</a>
+          </div>
+        </article>
+        <article class="card">
+          <p class="ctx">Proyecto académico · 2024</p>
+          <h3>CHMáquina</h3>
+          <p>Simulador de una máquina con procesador, memoria e intérprete de un lenguaje propio, con interfaz gráfica en Tkinter.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">Python</span><span class="tag">Tkinter</span></div>
+            <a class="repo" href="https://github.com/NicolasCastilloGaleano/CHMaquina" target="_blank" rel="noopener">Repo →</a>
+          </div>
+        </article>
+        <article class="card">
+          <p class="ctx">Ejercicio de refactorización · 2025</p>
+          <h3>Refactorización de Jitsi Desktop</h3>
+          <p>Refactorización y documentación de código Java heredado de un proyecto open source de gran tamaño.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">Java</span><span class="tag">Refactorización</span></div>
+            <a class="repo" href="https://github.com/NicolasCastilloGaleano/jitsi/pull/31" target="_blank" rel="noopener">PR →</a>
+          </div>
+        </article>
       </div>
     </div>
   </div>
@@ -363,134 +468,109 @@
 
 <!-- HABILIDADES -->
 <section id="habilidades">
-  <p class="section-label">// 02. habilidades</p>
-  <h2 class="section-title">Mi <span>stack</span></h2>
-  <div class="skills-grid">
-    <div class="skill-card">
-      <div class="skill-card-icon">⚙️</div>
-      <div class="skill-card-title">Lenguajes</div>
-      <div class="skill-tags">
-        <span class="tag">Python</span>
-        <span class="tag">JavaScript</span>
-        <span class="tag">Java</span>
-        <span class="tag">C++</span>
+  <div class="wrap">
+    <p class="label">Habilidades</p>
+    <h2>Herramientas con las que trabajo</h2>
+    <div class="skills">
+      <div class="skill">
+        <h3>Backend</h3>
+        <div class="tags">
+          <span class="tag strong">Python</span><span class="tag strong">FastAPI</span><span class="tag strong">Flask</span>
+          <span class="tag">TypeScript</span><span class="tag">Node.js / Express</span><span class="tag">APIs REST</span><span class="tag">JWT</span>
+          <span class="tag learning">Java / Spring Boot</span>
+        </div>
+      </div>
+      <div class="skill">
+        <h3>IA aplicada</h3>
+        <div class="tags">
+          <span class="tag strong">LLM locales (Ollama)</span><span class="tag strong">RAG</span><span class="tag strong">Prompt engineering</span>
+          <span class="tag strong">Claude Code</span><span class="tag strong">LangChain</span><span class="tag">n8n</span><span class="tag">YOLOv8</span>
+        </div>
+      </div>
+      <div class="skill">
+        <h3>Bases de datos</h3>
+        <div class="tags">
+          <span class="tag">MariaDB / MySQL</span><span class="tag">SQLite</span><span class="tag">MongoDB</span>
+          <span class="tag">Firestore</span><span class="tag">Supabase (pgvector)</span><span class="tag">ChromaDB</span>
+        </div>
+      </div>
+      <div class="skill">
+        <h3>Calidad y arquitectura</h3>
+        <div class="tags">
+          <span class="tag strong">pytest</span><span class="tag strong">Arquitectura hexagonal</span><span class="tag">mypy</span><span class="tag">ruff</span>
+          <span class="tag">Vitest</span><span class="tag">Microservicios</span><span class="tag">ADR</span><span class="tag">Desarrollo guiado por especificación</span>
+        </div>
+      </div>
+      <div class="skill">
+        <h3>Herramientas e infraestructura</h3>
+        <div class="tags">
+          <span class="tag">Git</span><span class="tag">GitHub Actions</span><span class="tag">Linux</span>
+          <span class="tag learning">AWS (en curso)</span><span class="tag learning">Docker</span>
+        </div>
+      </div>
+      <div class="skill">
+        <h3>Idiomas y habilidades blandas</h3>
+        <div class="tags">
+          <span class="tag">Español nativo</span><span class="tag">Inglés intermedio (B1)</span>
+          <span class="tag">Liderazgo de equipo</span><span class="tag">Aprendizaje autónomo</span><span class="tag">Comunicación</span>
+        </div>
       </div>
     </div>
-    <div class="skill-card">
-      <div class="skill-card-icon">🌐</div>
-      <div class="skill-card-title">Frontend</div>
-      <div class="skill-tags">
-        <span class="tag">HTML</span>
-        <span class="tag">CSS</span>
-        <span class="tag">React</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-card-icon">🗄️</div>
-      <div class="skill-card-title">Backend & DB</div>
-      <div class="skill-tags">
-        <span class="tag">Node.js</span>
-        <span class="tag">MySQL</span>
-        <span class="tag">PostgreSQL</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-card-icon">🛠️</div>
-      <div class="skill-card-title">Herramientas</div>
-      <div class="skill-tags">
-        <span class="tag">Git</span>
-        <span class="tag">GitHub</span>
-        <span class="tag">Linux</span>
-        <span class="tag">VS Code</span>
-      </div>
+    <div class="legend">
+      <span><span class="tag strong">Python</span> lo uso con soltura</span>
+      <span><span class="tag">SQL</span> experiencia en proyectos</span>
+      <span><span class="tag learning">AWS</span> básico / aprendiendo</span>
     </div>
   </div>
 </section>
 
-<!-- PROYECTOS -->
-<section id="proyectos">
-  <p class="section-label">// 03. proyectos</p>
-  <h2 class="section-title">Mi <span>trabajo</span></h2>
-  <div class="projects-grid">
-    <div class="project-card">
-      <p class="project-num">01 — Proyecto universitario</p>
-      <h3 class="project-title">Nombre del Proyecto</h3>
-      <p class="project-desc">Descripción breve de qué hace el proyecto, qué problema resuelve y qué aprendiste construyéndolo.</p>
-      <div class="project-footer">
-        <div class="project-stack">
-          <span class="tag">Python</span>
-          <span class="tag">Flask</span>
-        </div>
-        <a href="#" class="project-link">GitHub →</a>
+<!-- FORMACIÓN -->
+<section id="formacion">
+  <div class="wrap">
+    <p class="label">Formación</p>
+    <h2>Educación</h2>
+    <div class="edu">
+      <div class="edu-card">
+        <h3>Ingeniería de Sistemas y Computación</h3>
+        <p>Universidad de Caldas · 9.º semestre · promedio 4.2 / 5.0</p>
+        <p class="when">Grado estimado: mediados de 2027</p>
       </div>
-    </div>
-    <div class="project-card">
-      <p class="project-num">02 — Proyecto universitario</p>
-      <h3 class="project-title">Otro Proyecto</h3>
-      <p class="project-desc">Aquí va la descripción. Puedes mencionar el contexto de la materia, el reto técnico principal y el resultado.</p>
-      <div class="project-footer">
-        <div class="project-stack">
-          <span class="tag">React</span>
-          <span class="tag">Node.js</span>
-        </div>
-        <a href="#" class="project-link">GitHub →</a>
+      <div class="edu-card">
+        <h3>AWS Cloud Practitioner Essentials</h3>
+        <p>AWS Skill Builder</p>
+        <p class="when">En curso</p>
       </div>
-    </div>
-    <div class="project-card" style="border-style: dashed; opacity: 0.6;">
-      <p class="project-num">03 — Próximamente</p>
-      <h3 class="project-title">Tu próximo proyecto</h3>
-      <p class="project-desc">Este espacio está listo para el siguiente proyecto que construyas. El portafolio crece contigo.</p>
-      <div class="project-footer">
-        <div class="project-stack">
-          <span class="tag">???</span>
-        </div>
+      <div class="edu-card">
+        <h3>Bachiller</h3>
+        <p>INEM Baldomero Sanín Cano, Manizales</p>
+        <p class="when">2016</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- CONTACTO -->
-<section id="contacto">
-  <p class="section-label">// 04. contacto</p>
-  <h2 class="section-title">Hablemos <span>:)</span></h2>
-  <div class="contact-wrapper">
-    <p class="contact-intro">
-      ¿Tienes un proyecto interesante, una idea o simplemente quieres conectar? Escríbeme y con gusto respondo.
-    </p>
-    <div class="contact-form">
-      <div class="form-group">
-        <label class="form-label">nombre</label>
-        <input type="text" class="form-input" placeholder="Tu nombre" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">correo</label>
-        <input type="email" class="form-input" placeholder="tu@correo.com" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">mensaje</label>
-        <textarea class="form-textarea" placeholder="Cuéntame en qué puedo ayudarte..."></textarea>
-      </div>
-      <button class="btn-primary" style="align-self: flex-start;">Enviar mensaje →</button>
-    </div>
-    <div class="social-links">
-      <a href="#" class="social-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-        GitHub
+<section id="contacto" class="contact">
+  <div class="wrap">
+    <p class="label">Contacto</p>
+    <h2>Hablemos</h2>
+    <p>Busco una práctica empresarial en desarrollo backend o IA aplicada, con la intención de seguir en el equipo a largo plazo. Respondo rápido por correo.</p>
+    <div class="actions">
+      <a class="btn primary" href="mailto:nicolas99cg@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        nicolas99cg@gmail.com
       </a>
-      <a href="#" class="social-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        LinkedIn
-      </a>
-      <a href="mailto:tu@correo.com" class="social-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
-        Email
-      </a>
+      <a class="btn" href="https://github.com/NicolasCastilloGaleano" target="_blank" rel="noopener">github.com/NicolasCastilloGaleano</a>
+      <!-- Cuando crees LinkedIn, descomenta y pon tu URL:
+      <a class="btn" href="https://www.linkedin.com/in/TU-USUARIO" target="_blank" rel="noopener">LinkedIn</a>
+      -->
     </div>
   </div>
 </section>
+</main>
 
 <footer>
-  <p>Diseñado & construido por <span style="color: var(--accent2);">Tu Nombre</span> · 2025</p>
+  <div class="wrap">Nicolas Castillo Galeano · Manizales, Colombia · Actualizado en noviembre de 2026</div>
 </footer>
 
 </body>
