@@ -72,6 +72,14 @@
 
   /* HERO */
   .hero { padding: 88px 0 64px; }
+  .hero-top { display: flex; align-items: center; gap: 28px; margin-bottom: 14px; }
+  .hero-top h1 { margin-bottom: 0; }
+  .hero-top .eyebrow { margin-bottom: 14px; }
+  .avatar { width: 132px; height: 132px; border-radius: 50%; object-fit: cover; flex: none; border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--border), var(--shadow); }
+  @media (max-width: 760px) {
+    .hero-top { flex-direction: column; align-items: flex-start; gap: 18px; }
+    .avatar { width: 104px; height: 104px; }
+  }
   .eyebrow {
     display: inline-flex; align-items: center; gap: 8px;
     font-size: .82rem; color: var(--accent-text);
@@ -202,8 +210,13 @@
 <main id="inicio">
 <header class="hero">
   <div class="wrap">
-    <p class="eyebrow">Disponible para práctica empresarial · Manizales, Colombia</p>
-    <h1>Nicolas Castillo Galeano</h1>
+    <div class="hero-top">
+      <img class="avatar" src="foto.jpg" alt="Foto de Nicolas Castillo Galeano" width="132" height="132">
+      <div>
+        <p class="eyebrow">Disponible para práctica empresarial · Manizales, Colombia</p>
+        <h1>Nicolas Castillo Galeano</h1>
+      </div>
+    </div>
     <p class="role">Desarrollador backend en Python · IA aplicada</p>
     <p class="lead">
       Estudiante de último año de <strong>Ingeniería de Sistemas y Computación</strong> en la Universidad de Caldas.
